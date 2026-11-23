@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SQL Predictor — Autocompletado Inteligente</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Barra superior -->
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-icon" aria-hidden="true">SQL</span>
+        <div>
+          <h1>SQL Predictor</h1>
+          <p class="subtitle">Motor predictivo N-grama + Esquema relacional</p>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <label class="btn btn-secondary file-label" for="dictFileInput" title="Cargar otro archivo .txt o .sql">
+          Cargar diccionario
+        </label>
+        <input type="file" id="dictFileInput" accept=".txt,.sql" hidden />
+
+        <button id="btnResetDict" class="btn btn-ghost" type="button" title="Restaurar LLMFINETUNNING.txt">
+          Restaurar original
+        </button>
+        <button id="btnClearEditor" class="btn btn-ghost" type="button" title="Limpiar editor">
+          Limpiar
+        </button>
+      </div>
+    </header>
+
+    <!-- Contenido principal -->
+    <main class="workspace">
+      <!-- Panel izquierdo: Editor -->
+      <section class="editor-panel">
+        <div class="panel-header">
+          <div class="tab-active">
+            <span class="dot"></span>
+            consulta.sql
+          </div>
+          <div class="quick-prompts">
+            <span class="quick-label">Probar:</span>
+            <button type="button" class="chip" data-snippet="SELECT ">SELECT</button>
+            <button type="button" class="chip" data-snippet="SELECT c.nombre, p.monto_total FROM clientes c ">JOIN alias</button>
+            <button type="button" class="chip" data-snippet="INSERT INTO ">INSERT</button>
+            <button type="button" class="chip" data-snippet="UPDATE pedidos SET ">UPDATE</button>
+            <button type="button" class="chip" data-snippet="DELETE FROM ">DELETE</button>
+          </div>
+        </div>
+
+        <div class="editor-wrapper">
+          <div id="lineNumbers" class="line-numbers" aria-hidden="true">1</div>
+          <div class="textarea-stage">
+            <textarea
+              id="sqlEditor"
+              class="sql-textarea"
+              spellcheck="false"
+              autocomplete="off"
+              autocorrect="off"
+              autocapitalize="off"
+              placeholder="Escribe una consulta SQL aquí... (Ej. SELECT nombre FROM clientes WHERE ...)"
+            ></textarea>
+
+            <!-- Menú emergente de autocompletado -->
+            <div id="autocompletePopup" class="autocomplete-popup hidden" role="listbox" aria-label="Sugerencias SQL"></div>
+          </div>
+        </div>
+
+        <!-- Barra de estado -->
+        <footer class="statusbar">
+          <div class="status-left">
+            <span id="dictStatus" class="status-pill">Cargando diccionario...</span>
+            <span id="cursorPos">Ln 1, Col 1</span>
+          </div>
+          <div class="status-right">
+            <span><kbd>↑</kbd> <kbd>↓</kbd> Navegar</span>
+            <span><kbd>Tab</kbd> / <kbd>Enter</kbd> Insertar</span>
+            <span><kbd>Ctrl</kbd>+<kbd>Espacio</kbd> Predecir</span>
+          </div>
+        </footer>
+      </section>
+
+      <!-- Panel derecho: Predicciones en vivo -->
+      <aside class="sidebar">
+        <section class="card">
+          <div class="card-header">
+            <h2>Predicción siguiente token</h2>
+          </div>
+          <ul id="livePredictions" class="prediction-list">
+            <li class="empty-state">Empieza a escribir en el editor para ver las predicciones.</li>
+          </ul>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <!-- Scripts separados -->
+  <script src="js/defaultCorpus.js"></script>
+  <script src="js/predictor.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
